@@ -70,7 +70,7 @@ await server.start();
 //context is an object that is shared across all resolvers
 app.use('/',
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3000/",
     credentials: true,   //we can send coockies alongside our auth request
   }),
   express.json(),
@@ -81,4 +81,4 @@ app.use('/',
 
 await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
 await connectDB();
-console.log(`🚀 Server ready at http://localhost:4000/`);
+console.log(`🚀 Server ready at http://localhost:3000/`);
