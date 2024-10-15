@@ -1,4 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
+import {LoginPage } from './pages/LoginPage'
+import { HomePage } from './pages/HomePage'
+import {SignUpPage } from './pages/SignUpPage'
+import { TransactionPage } from './pages/TransactionPage'
+import { NotFoundPage} from './pages/NotFoundPage'
+
 
 function App() {
  
