@@ -1,5 +1,6 @@
 import {users} from '../dummyData/data.js'
 import User from "../models/user.model.js"
+import bcrypt from 'bcryptjs'
 
 const userResolver = {
   Mutation: {
@@ -42,6 +43,7 @@ const userResolver = {
     login: async(_,{input}, context) => {
       try{
         const {username, password} = input;
+        if (!username || !password) throw new Error("Please fill in all fields");
         const {user} =  await context.authenticate("graphql-local", {username, password}) 
 
         await context.login(user);
@@ -73,7 +75,7 @@ const userResolver = {
   Query: {
     authUser: async(_,args,context) => {
       try{
-        const user = await context.user();
+        const user = await context.getUser();
         return user;
 
       }catch(err){
