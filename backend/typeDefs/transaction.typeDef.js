@@ -7,7 +7,7 @@ type Transaction {
   paymentType: String!
   category: String
   amount: Float!
-  loaction: String
+  location: String
   date: String!
 }
 
