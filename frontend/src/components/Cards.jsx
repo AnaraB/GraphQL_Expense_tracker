@@ -3,7 +3,7 @@ import { GET_TRANSACTIONS } from "../graphql/queries/transaction.query";
 import { useQuery } from "@apollo/client";
 
 const Cards = () => {
-  const { data, loading, error } = useQuery(GET_TRANSACTIONS);
+  const { data, loading } = useQuery(GET_TRANSACTIONS);
 
   // if(error) return <p>Error: {error.message}</p>
   // if(loading) return <p>Loading...</p>

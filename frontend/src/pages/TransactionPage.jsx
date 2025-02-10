@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { GET_TRANSACTION } from "../graphql/queries/transaction.query";
 //import TranscationFormSkeleton from '../components/skeletons/TransactionFormSkeleton'
 
 const TransactionPage = () => {
+	const { id } = useParams();
+	console.log("Transaction ID from params:", id);
+
+ //fetch data with useQuery
+	const {loading, data} = useQuery(GET_TRANSACTION, {
+		variables: { id: id },  // should match Apollo client, query GetTransaction($id: ID!) 
+	})
+	console.log('Transaction', data);
+	//now populate fetched data in the input fields
+	//the initial formData remains unchanged because useState does not automatically update when data changes
+	//React does not re-run the useState initialization logic.
+		//component re-renders but input values are not re-evaluated, useEffect will fix that
+
+	//formData is initialized with empty strings because data is undefined at this point.
 	const [formData, setFormData] = useState({
-		description: "",
-		paymentType: "",
-		category: "",
-		amount: "",
-		location: "",
-		date: "",
+		description: data?.transaction?.description || "",
+		paymentType: data?.transaction?.paymentType || "",
+		category: data?.transaction?.category || "",
+		amount: data?.transaction?.amount || "",
+		location: data?.transaction?.location || "",
+		date: data?.transaction?.data || "",
 	});
 
 	const handleSubmit = async (e) => {
@@ -22,6 +39,20 @@ const TransactionPage = () => {
 			[name]: value,
 		}));
 	};
+	//The useEffect hook responds to changes in the data value. When the query completes and data updates, 
+	//the useEffect hook runs, updating formData with the fetched data:
+	useEffect(() => {
+		if(data) {
+			setFormData({
+				description: data?.transaction?.description,
+				paymentType: data?.transaction?.paymentType,
+				category: data?.transaction?.category,
+				amount: data?.transaction?.amount,
+				location: data?.transaction?.location,
+				date: data?.transaction?.data,
+			});
+		}
+	}, [data]); // Ensures the useEffect runs only when data changes.
 
 	// if (loading) return <TransactionFormSkeleton />;
 

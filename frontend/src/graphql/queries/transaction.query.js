@@ -24,11 +24,7 @@ export const GET_TRANSACTION = gql`
 			amount
 			location
 			date
-			user {
-				name
-				username
-				profilePicture
-			}
+			
 		}
 	}
 `;
