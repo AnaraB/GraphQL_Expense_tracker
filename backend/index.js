@@ -67,6 +67,8 @@ const server = new ApolloServer({
 //ensure we wait our middlewear to start
 await server.start();
 
+
+
 //set up our Express middleware to handle CORS, body parser, and our expressMiddlewear func
 //context is an object that is shared across all resolvers
 app.use(
@@ -79,7 +81,16 @@ app.use(
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async ({ req, res }) => buildContext({ req, res }),
+    context: async ({ req, res }) => {
+      return {
+        req,
+        res,
+        getUser: () => {
+          if (!req.user) throw new Error("Unauthorized");
+          return req.user; // Passport sets `req.user` for authenticated sessions
+        },
+      };
+    },
   })
 );
 

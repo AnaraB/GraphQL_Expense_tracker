@@ -5,13 +5,23 @@ import TransactionForm from "../components/TransactionForm";
 
 import toast from "react-hot-toast";
 import { MdLogout } from "react-icons/md";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LOGOUT } from "../graphql/mutations/user.mutation";
 import { Navigate } from "react-router-dom";
+import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
+	const {data } = useQuery(GET_TRANSACTION_STATISTICS);
+	console.log('Category Statistics:', data);
+
+ //for now refetchingQuery is a convenient approach
+	// to log out user, we need to refetchQueries  GET_AUTHENTICATED_USER query. 
+	//based on   <Route path="/" element={data.authUser ? <HomePage /> : <Navigate to="/login" />} /> it will navigate user to login  
+	const [logout, {loading, client, error}]= useMutation(LOGOUT, {
+		refetchQueries: ["GetAuthenticatedUser"],
+	})
+
 	const chartData = {
 		labels: ["Saving", "Expense", "Investment"],
 		datasets: [
@@ -27,28 +37,27 @@ const HomePage = () => {
 			},
 		],
 	};
- 
+	
 
 	//NOTE, when app usage increases and there are many more users it is better approach to clear cash
 	// Clear the Apollo Client cache FROM THE DOCS
 	// https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
 
-	//for now refetchingQuery is a convenient approach
-	// to log out user, we need to refetchQueries  GET_AUTHENTICATED_USER query. 
-	//based on   <Route path="/" element={data.authUser ? <HomePage /> : <Navigate to="/login" />} /> it will navigate user to login  
-	const [logout, {loading, error}]= useMutation(LOGOUT, {
-		refetchQueries: ["GetAuthenticatedUser"],
-	})
-	const handleLogout = async () => {
+
+
+const handleLogout = async () => {
 		try{
 			await logout()
+			//clear cash and reset store, so one user can't see other user transactions
+			client.resetStore();
 	
 		} catch(error){
       console.error("Error", error);
       toast.error(error.message);
 		}
+   }
 
-	};
+	
 
 
 	return (
@@ -69,7 +78,7 @@ const HomePage = () => {
 				</div>
 				<div className='flex flex-wrap w-full justify-center items-center gap-6'>
 					<div className='h-[330px] w-[330px] md:h-[360px] md:w-[360px]  '>
-						<Doughnut data={chartData} />
+				
 					</div>
 
 					<TransactionForm />
