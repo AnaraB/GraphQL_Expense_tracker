@@ -18,7 +18,6 @@ const Cards = () => {
 
   //console.log("cards: ", data.transactions)
 
-  //TO-DO: ADD RELATIONSHIPS
   return (
     <div className="w-full px-10 min-h-[40vh]">
       <p className="text-5xl font-bold text-center my-10">History</p>
@@ -35,7 +34,7 @@ const Cards = () => {
 				<Card cardType={"expense"} /> */}
       </div>
       {!loading && data?.transactions?.length === 0 && (
-        <p classname="text-2xl font-bold text-center w-full">
+        <p className="text-2xl font-bold text-center w-full">
           No Transaction History Found
         </p>
       )}
