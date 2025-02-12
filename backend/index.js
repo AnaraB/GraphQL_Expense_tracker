@@ -24,7 +24,7 @@ import { configurePassport } from "./passport/passport.config.js";
 dotnev.config();
 configurePassport();
 
-const _dirname = path.resolve();
+const __dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -85,9 +85,9 @@ app.use(
 	})
 );
 
-app.use(express.static(path.join(_dirname, "frontend/dist")))
+app.use(express.static(path.join(__dirname, "frontend/dist")))
 app.get("*", (req, res) => {
-  res.sendFile(path.join(_dirname, "frontend/dist", "index.html"))
+  res.sendFile(path.join(__dirname, "frontend/dist", "index.html"))
 })
 
 await new Promise((resolve) => httpServer.listen({ port: 3000 }, resolve));
