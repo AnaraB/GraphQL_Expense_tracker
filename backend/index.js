@@ -2,6 +2,7 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import dotnev from "dotenv";
+import path from "path";
 
 //for user auth
 import passport from "passport";
@@ -23,6 +24,7 @@ import { configurePassport } from "./passport/passport.config.js";
 dotnev.config();
 configurePassport();
 
+const _dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -82,6 +84,11 @@ app.use(
 		context: async ({ req, res }) => buildContext({ req, res }),
 	})
 );
+
+app.use(express.static(path.join(_dirname, "frontend/dist")))
+app.get("*", (req, res) => {
+  res.sendFile(path.join(_dirname, "frontend/dist", "index.html"))
+})
 
 await new Promise((resolve) => httpServer.listen({ port: 3000 }, resolve));
 await connectDB();
