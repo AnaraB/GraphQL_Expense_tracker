@@ -13,7 +13,7 @@ const TransactionPage = () => {
   const { loading, data } = useQuery(GET_TRANSACTION, {
     variables: { id: id }, // should match Apollo client, query GetTransaction($id: ID!)
   });
-  //console.log('Transaction', data);
+  console.log('Transaction', data);
   //now populate fetched data in the input fields
   //the initial formData remains unchanged because useState does not automatically update when data changes
   //React does not re-run the useState initialization logic.

@@ -78,20 +78,9 @@ app.use(
     credentials: true, //we can send coockies alongside our auth request
   }),
   express.json(),
-  // expressMiddleware accepts the same arguments:
-  // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async ({ req, res }) => {
-      return {
-        req,
-        res,
-        getUser: () => {
-          if (!req.user) throw new Error("Unauthorized");
-          return req.user; // Passport sets `req.user` for authenticated sessions
-        },
-      };
-    },
-  })
+		context: async ({ req, res }) => buildContext({ req, res }),
+	})
 );
 
 await new Promise((resolve) => httpServer.listen({ port: 3000 }, resolve));

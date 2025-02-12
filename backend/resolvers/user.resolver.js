@@ -1,4 +1,4 @@
-import {users} from '../dummyData/data.js'
+import Transactions from "../models/transaction.model.js"
 import User from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
 
@@ -57,6 +57,7 @@ const userResolver = {
     },
     logout: async(_, args, context) => {
       try{
+        //console.log('from user resolver-logout', context)
         await context.logout();
         context.req.session.destroy((err) => {
           if(err)throw err;
@@ -97,7 +98,20 @@ const userResolver = {
     }
   }, 
 
-  // TODO => ADD USER/TRANSACTION Relationship 
+  //add special type USer to get the transactions of the user
+  User: {
+  transactions: async (parent)=> {
+    try{
+      const transactions = await Transactions.find({userId: parent._id})
+      return transactions;
+
+    }catch(error){
+      console.log("Error in user.transaciton resolver", error);
+      throw new Error(err.message || "internal server error");
+    }
+  }
+  }
+
 }
 
 export default userResolver;

@@ -9,6 +9,7 @@ type Transaction {
   amount: Float!
   location: String
   date: String!
+  user: User!  
 
 }
 

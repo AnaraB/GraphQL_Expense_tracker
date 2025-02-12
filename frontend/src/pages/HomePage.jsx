@@ -10,6 +10,7 @@ import {useState, useEffect} from 'react';
 import { LOGOUT } from "../graphql/mutations/user.mutation";
 import { Navigate } from "react-router-dom";
 import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query";
+import {GET_AUTHENTICATED_USER } from "../graphql/queries/user.query";
 
  //dummy static data
 	// const chartData = {
@@ -30,6 +31,7 @@ import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query
 
 const HomePage = () => {
 	const {data } = useQuery(GET_TRANSACTION_STATISTICS);
+	const {data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
 	//console.log('Category Statistics:', data);
 
  //for now refetchingQuery is a convenient approach
@@ -123,7 +125,7 @@ const handleLogout = async () => {
 						Spend wisely, track wisely
 					</p>
 					<img
-						src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+						src={authUserData?.authUser.profilePicture}
 						className='w-11 h-11 rounded-full border cursor-pointer'
 						alt='Avatar'
 					/>
