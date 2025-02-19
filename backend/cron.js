@@ -5,7 +5,7 @@ import https from 'https';
 
 const URL = "https://graphql-expense-tracker-dnei.onrender.com";
 
-const job = new cron.CronJob('*14 * * * * ', function(){
+const job = new cron.CronJob('*/14 * * * * ', function(){
   https.get(URL, (res) => {
     if(res.status === 200) {
       console.log("Get request sent successfully")
